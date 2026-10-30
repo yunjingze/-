@@ -1,0 +1,26 @@
+# 实验三 第一部分(一)：用 HBase Shell 完成 5 个任务
+# 前提：先运行 ../java/build_and_run.sh 建好 Student/Course/SC 三表并导入数据
+# 运行方式：hbase shell hbase_shell_demo.hbs
+
+# 任务1：列出 HBase 所有表的相关信息（表名）
+list
+
+# 任务2：在终端显示指定表(Student)的所有记录数据
+scan 'Student'
+
+# 任务3：向已创建好的表添加和删除指定的列族或列
+alter 'Student', {NAME => 'score'}                 # 添加列族 score
+put 'Student', 'Zhangsan', 'score:Math', '90'      # 向 Zhangsan 行添加列 score:Math
+scan 'Student', {COLUMN => 'score:Math'}           # 查看添加结果
+delete 'Student', 'Zhangsan', 'score:Math'         # 删除指定列
+alter 'Student', 'delete' => 'score'               # 删除列族 score
+
+# 任务5：统计表行数（放在 truncate 之前，先统计出 3）
+count 'Student'
+count 'SC'
+
+# 任务4：清空指定表的所有记录数据
+truncate 'Student'
+count 'Student'
+scan 'Student'
+list
